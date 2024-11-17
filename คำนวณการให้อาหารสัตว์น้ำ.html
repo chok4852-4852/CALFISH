@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Daily Feed and Production Calculator</title>
+    <style>
+        .result {
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h1>Daily Feed and Production Calculator</h1>
+    <form id="feedForm">
+        <label for="fishSize">ขนาดตัวที่สุ่ม (ตัวต่อกิโลกรัม):</label>
+        <input type="number" id="fishSize" required><br>
+
+        <label for="cultureDays">ระยะเวลาการเลี้ยง (วัน):</label>
+        <input type="number" id="cultureDays" required><br>
+
+        <label for="currentFeed">ปริมาณอาหารที่ให้ ณ ปัจจุบัน (กิโลกรัม):</label>
+        <input type="number" id="currentFeed" required><br>
+
+        <label for="releaseRate">อัตราการปล่อย (ตัว):</label>
+        <input type="number" id="releaseRate" required><br>
+
+        <label for="survivalRate">อัตรารอดคาดการณ์ (%):</label>
+        <input type="number" id="survivalRate" required><br>
+        
+        <button type="button" onclick="calculate()">Calculate</button>
+    </form>
+
+    <div id="results" class="result"></div>
+
+    <script>
+        function calculate() {
+            var fishSize = parseFloat(document.getElementById('fishSize').value);
+            var cultureDays = parseFloat(document.getElementById('cultureDays').value);
+            var currentFeed = parseFloat(document.getElementById('currentFeed').value);
+            var releaseRate = parseFloat(document.getElementById('releaseRate').value);
+            var survivalRate = parseFloat(document.getElementById('survivalRate').value) / 100;
+
+            // Calculate daily feed (assuming 5% of body weight per day)
+            var dailyFeedPerFish = (1 / fishSize) * 0.05; // feed per fish in kg
+            var totalFeedPerDay = dailyFeedPerFish * releaseRate * survivalRate; // total feed per day in kg
+
+            // Calculate expected production
+            var expectedProduction = (releaseRate * survivalRate) / fishSize; // in kg
+
+            // Display results
+            var resultsDiv = document.getElementById('results');
+            resultsDiv.innerHTML = `
+                ปริมาณการให้อาหารสัตว์น้ำต่อวัน: ${totalFeedPerDay.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",")} กิโลกรัม<br>
+                ปริมาณผลผลิตที่คาดการณ์ได้: ${expectedProduction.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",")} กิโลกรัม<br>
+            `;
+        }
+    </script>
+</body>
+</html>
